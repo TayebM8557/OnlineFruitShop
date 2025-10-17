@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] - WebApplication.EndPoint</title>
+    <!-- font---------------------------------------->
+    <link rel="stylesheet" href="~/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/vendor/materialdesignicons.css">
+    <!-- plugin-------------------------------------->
+    <link rel="stylesheet" href="~/css/vendor/bootstrap.css">
+    <link rel="stylesheet" href="~/css/vendor/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/vendor/nice-select.css">
+    <link rel="stylesheet" href="~/css/vendor/jquery.jqZoom.css">
+    <link rel="stylesheet" href="~/css/vendor/sweetalert2.min.css">
+    <!-- main-style---------------------------------->
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/responsive.css">
+
+    <style>
+
+
+
+
+
+        .variants {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .variants > div {
+                margin-right: 5px;
+            }
+
+                .variants > div:last-of-type {
+                    margin-right: 0;
+                }
+
+        .file {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .file > input[type='file'] {
+                display: none
+            }
+
+            .file > label {
+                font-size: 1rem;
+                font-weight: 300;
+                cursor: pointer;
+                outline: 0;
+                user-select: none;
+                border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+                border-style: solid;
+                border-radius: 4px;
+                border-width: 1px;
+                background-color: hsl(0, 0%, 100%);
+                color: hsl(0, 0%, 29%);
+                padding-left: 16px;
+                padding-right: 16px;
+                padding-top: 16px;
+                padding-bottom: 16px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 45px;
+            }
+
+                .file > label:hover {
+                    border-color: hsl(0, 0%, 21%);
+                }
+
+                .file > label:active {
+                    background-color: hsl(0, 0%, 96%);
+                }
+
+                .file > label > i {
+                    padding-right: 5px;
+                }
+
+        .file--upload > label {
+            color: hsl(204, 86%, 53%);
+            border-color: hsl(204, 86%, 53%);
+        }
+
+            .file--upload > label:hover {
+                border-color: hsl(204, 86%, 53%);
+                background-color: hsl(204, 86%, 96%);
+            }
+
+            .file--upload > label:active {
+                background-color: hsl(204, 86%, 91%);
+            }
+
+        .file--uploading > label {
+            color: hsl(48, 100%, 67%);
+            border-color: hsl(48, 100%, 67%);
+            height: 45px;
+        }
+
+            .file--uploading > label > i {
+                animation: pulse 5s infinite;
+            }
+
+            .file--uploading > label:hover {
+                border-color: hsl(48, 100%, 67%);
+                background-color: hsl(48, 100%, 96%);
+            }
+
+            .file--uploading > label:active {
+                background-color: hsl(48, 100%, 91%);
+            }
+
+        .file--success > label {
+            color: hsl(141, 71%, 48%);
+            border-color: hsl(141, 71%, 48%);
+        }
+
+            .file--success > label:hover {
+                border-color: hsl(141, 71%, 48%);
+                background-color: hsl(141, 71%, 96%);
+            }
+
+            .file--success > label:active {
+                background-color: hsl(141, 71%, 91%);
+            }
+
+        .file--danger > label {
+            color: hsl(348, 100%, 61%);
+            border-color: hsl(348, 100%, 61%);
+        }
+
+            .file--danger > label:hover {
+                border-color: hsl(348, 100%, 61%);
+                background-color: hsl(348, 100%, 96%);
+            }
+
+            .file--danger > label:active {
+                background-color: hsl(348, 100%, 91%);
+            }
+
+        .file--disabled {
+            cursor: not-allowed;
+        }
+
+            .file--disabled > label {
+                border-color: #e6e7ef;
+                color: #e6e7ef;
+                pointer-events: none;
+            }
+
+    </style>
+</head>
+<body>
+    <div class="post-item-profile order-1 d-block">
+        <div class="col-lg-3 col-md-3 col-xs-12 pr">
+            <div class="sidebar-profile sidebar-navigation">
+                <section class="profile-box">
+                    <header class="profile-box-header-inline">
+                        <div class="profile-avatar user-avatar profile-img">
+                            <img src="~/Img/man.png">
+                        </div>
+                        @*  <form method="post">
+                        <input type="hidden" id="projectinput3" class="form-control" name="Id" value="@Model.Customer.Id" readonly="readonly">
+                        <div class='file file--upload'>
+                        <label for='input-file'>
+                        <i class="material-icons"></i>Upload
+                        </label>
+                        <input id='input-file' type='file' height="45px"/>
+                        </div>
+                        </form> *@
+                    </header>
+
+                    <footer class="profile-box-content-footer">
+                        <span class="profile-box-nameuser">@* @Model.Customer?.FirstName @Model.Customer?.LastName *@</span>
+                        <span class="profile-box-registery-date">عضویت در سایت 2 پیش</span>
+                        <span class="profile-box-phone">شماره همراه : @* @Model.Customer?.PhoneNumber *@</span>
+                        <div class="profile-box-tabs">
+                            <form method="post">
+                                <button type="submit" class="btn btn-danger">خروج از حساب</button>
+                            </form>
+                            @*  <a href="/Account/logout" class="profile-box-tab-sign-out"><i class="mdi mdi-logout-variant"></i>خروج از حساب</a> *@
+                        </div>
+                    </footer>
+                </section>
+                <section class="profile-box">
+                    <ul class="profile-account-navs">
+                        <li class="profile-account-nav-item navigation-link-dashboard">
+                            <a href="/ProfileCustomer" class="active">
+                                <i class="mdi mdi-account-outline"></i>
+                                پروفایل
+                            </a>
+                        </li>
+                        <li class="profile-account-nav-item navigation-link-dashboard">
+                            <a href="/OrderProfile" class="">
+                                <i class="mdi mdi-cart"></i>
+                                همه سفارش ها
+                            </a>
+                        </li>
+                        <li class="profile-account-nav-item navigation-link-dashboard">
+                            <a href="/ShowCart" class="">
+                                <i class="mdi mdi-heart"></i>
+                                سبد خرید
+                            </a>
+                        </li>
+                        <li class="profile-account-nav-item navigation-link-dashboard">
+                            <a href="#" class="">
+                                <i class="mdi mdi-map-outline"></i>
+                                آدرس ها
+                            </a>
+                        </li>
+                        <li class="profile-account-nav-item navigation-link-dashboard">
+                            <a href="#" class="">
+                                <i class="mdi mdi-email-open-outline"></i>
+                                نظرات
+                            </a>
+                        </li>
+                        <li class="profile-account-nav-item navigation-link-dashboard">
+                            <a href="#" class="">
+                                <i class="mdi mdi-tooltip-text-outline"></i>
+                                اطلاعات حساب
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+</body>
+<!-- file js---------------------------------------------------->
+<script src="~/js/vendor/jquery-3.2.1.min.js"></script>
+<script src="~/js/vendor/bootstrap.js"></script>
+<!-- plugin----------------------------------------------------->
+<script src="~/js/vendor/owl.carousel.min.js"></script>
+<script src="~/js/vendor/jquery.countdown.js"></script>
+<script src="~/js/vendor/jquery.nice-select.min.js"></script>
+<script src="~/js/vendor/jquery.jqZoom.js"></script>
+<script src="~/js/vendor/sweetalert2.all.min.js"></script>
+<!-- main js---------------------------------------------------->
+<script src="~/js/main.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</html>
+

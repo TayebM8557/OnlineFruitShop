@@ -1,0 +1,94 @@
+﻿@page
+@model OnlineFruitShop.Pages.Admin.ProductPage.AddProductModel
+@{
+    Layout = "Shared/_LayoutAdmin";
+}
+
+<section class="basic-elements">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 class="content-header">فرم ایجاد کالا</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title mb-0">ایجاد کالا</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="px-3">
+                        <form class="form" method="post" asp-page-handler="Create" enctype="multipart/form-data">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="basicInput">نام کالا</label>
+                                            <input type="text" name="Name" class="form-control" id="basicInput">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="helpInputTop">توضیحات</label>
+                                            @* 	<small class="text-muted"><i>fkazemi5236@gmail.com</i></small> *@
+                                            <input type="text" name="Description" class="form-control" id="helpInputTop">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="disabledInput">قیمت</label>
+                                            <input type="text" name="Price" class="form-control" id="disabledInput">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="disabledInput">موجودی</label>
+                                            <input type="text" name="Stock" class="form-control" id="readonlyInput">
+
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <div class="row">
+                                            <div class="col-xl-12 col-lg-6 col-md-12 mb-1">
+                                                <div class="col-md-12">
+                                                    <!-- آپلود تصویر جدید -->
+                                                    <label>آپلود تصویر جدید</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">بارگذاری</span>
+                                                        </div>
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" asp-for="Upload" id="inputGroupFile01" accept="image/*">
+                                                            <label class="custom-file-label" for="inputGroupFile01">انتخاب فایل</label>
+                                                        </div>
+                                                    </div>
+                                                    <span asp-validation-for="Upload" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="projectinput3">دسته بندی</label>
+                                        <select class="form-control" name="CategoryId" id="addressSelect">
+                                            @foreach (var item in Model?.Categories)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <button type="submit" class="btn btn-primary btn-round">ایجاد</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Basic Inputs end -->

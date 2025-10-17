@@ -1,0 +1,72 @@
+﻿@page
+@model OnlineFruitShop.Pages.OrderProfileViewModel
+@{
+    Layout = "Shared/_LayoutProfile";
+}
+
+
+<div class="col-lg-9 col-md-9 col-xs-12 pl">
+    <div class="profile-content">
+        <div class="profile-stats">
+            <div class="table-order-view">
+                <h2 class="order-view-title mt-4 mb-3">جزییات سفارش </h2>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">نام محصول</th>
+                            <th scope="col">مجموع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="product-name">
+                                @Model.OrderItem?.Product?.Name
+                            </td>
+                            <td class="product-total">
+                                <span class="amount">
+                                    <span>تومان</span>
+                                    @Model.OrderItem?.Product?.Price
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="row">مجموع:</th>
+                            <td>
+                                <span class="amount">
+                                    <span>تومان</span>
+                                    @Model.OrderItem?.UnitPrice
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">حمل و نقل:</th>
+                            <td>حمل و نقل رایگان</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">روش پرداخت:</th>
+                            <td>انتقال مستقیم بانکی</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">تعداد</th>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">قیمت نهایی:</th>
+                            <td>
+                                <span class="amount">
+                                    <span>تومان</span>
+                                    40,000
+                                </span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <br>
+                <br>
+
+            </div>
+        </div>
+    </div>
+</div>

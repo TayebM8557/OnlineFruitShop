@@ -1,0 +1,65 @@
+﻿
+
+<html lang="en" class="loading">
+
+<head>
+    <link rel="apple-touch-icon" sizes="60x60" href="~/Admin/img/ico/apple-icon-60.html">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Admin/img/ico/apple-icon-76.html">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Admin/img/ico/apple-icon-120.html">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Admin/img/ico/apple-icon-152.html">
+    <link rel="shortcut icon" type="image/x-icon" href="https://pixinvent.com/demo/convex-bootstrap-admin-dashboard-template/app-assets/img/ico/favicon.ico">
+    <link rel="shortcut icon" type="image/png" href="~/Admin/img/ico/favicon-32.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/Admin/fonts/feather/style.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Admin/fonts/simple-line-icons/style.css">
+    <link rel="stylesheet" type="text/css" href="~/Admin/fonts/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Admin/vendors/css/perfect-scrollbar.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Admin/vendors/css/prism.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Admin/vendors/css/chartist.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Admin/css/app.css">
+</head>
+<body data-col="1-column" class=" 1-column  blank-page blank-page">
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <div class="wrapper">
+        @RenderBody()
+      
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <!-- BEGIN VENDOR JS-->
+    <script src="~/Admin/vendors/js/core/jquery-3.3.1.min.js"></script>
+    <script src="~/Admin/js/persian-datepicker.min.js"></script>
+    <script src="~/Admin/vendors/js/core/popper.min.js"></script>
+    <script src="~/Admin/vendors/js/core/bootstrap.min.js"></script>
+    <script src="~/Admin/vendors/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Admin/vendors/js/prism.min.js"></script>
+    <script src="~/Admin/vendors/js/jquery.matchHeight-min.js"></script>
+    <script src="~/Admin/vendors/js  /></script>
+    <script src="~/Admin/vendors/js/pace/pace.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/datatables.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/dataTables.buttons.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/buttons.flash.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/jszip.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/pdfmake.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/vfs_fonts.js"></script>
+    <script src="~/Admin/vendors/js/datatable/buttons.html5.min.js"></script>
+    <script src="~/Admin/vendors/js/datatable/buttons.print.min.js"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <script src="~/Admin/js/data-tables/datatable-advanced.js"></script>
+    <script src="~/Admin/vendors/js/chartist.min.js"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN CONVEX JS-->
+    <script src="~/Admin/js/app-sidebar.js"></script>
+    <script src="~/Admin/js/notification-sidebar.js"></script>
+    <script src="~/Admin/js/customizer.js"></script>
+    <!-- END CONVEX JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <script src="~/Admin/js/dashboard-ecommerce.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- END PAGE LEVEL JS-->
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+﻿@page
+@model OnlineFruitShop.Pages.Admin.ProductPage.EditProductModel
+@{
+    Layout = "Shared/_LayoutAdmin";
+}
+
+<section class="basic-elements">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 class="content-header">فرم ایجاد کالا</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title mb-0">ایجاد کالا</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="px-3">
+                        <form class="form" method="post" asp-page-handler="Edit" enctype="multipart/form-data">
+                            <input type="text" name="Id" class="form-control" id="basicInput"
+                                   value="@Html.ValueFor(x => x.Product.Id)">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="basicInput">نام کالا</label>
+                                            <input type="text" name="Name" class="form-control" id="basicInput"
+                                                   value="@Html.ValueFor(x => x.Product.Name)">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="helpInputTop">توضیحات</label>
+                                            @* 	<small class="text-muted"><i>fkazemi5236@gmail.com</i></small> *@
+                                            <input type="text" name="Description" class="form-control" id="helpInputTop"
+                                                   value="@Html.ValueFor(x => x.Product.Description)">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="disabledInput">قیمت</label>
+                                            <input type="text" name="Price" class="form-control" id="disabledInput"
+                                                   value="@Html.ValueFor(x => x.Product.Price)">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <fieldset class="form-group">
+                                            <label for="disabledInput">موجودی</label>
+                                            <input type="text" name="Stock" class="form-control" id="readonlyInput"
+                                                   value="@Html.ValueFor(x => x.Product.Stock)">
+
+                                        </fieldset>
+                                    </div>
+                                    @*  <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <div class="row">
+                                            <div class="col-xl-12 col-lg-6 col-md-12 mb-1">
+
+                                                <div class=" col-md-12">
+                                                    <label>با دکمه مرور</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">بارگذاری</span>
+                                                        </div>
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" asp-for="Upload" id="inputGroupFile01"
+                                                                   value="@Html.ValueFor(x => x.Product.ImageUrl)">
+                                                            <label class="custom-file-label" for="inputGroupFile01">انتخاب فایل</label>
+                                                            <span asp-validation-for="Upload" class="text-danger"></span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div> *@
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <div class="row">
+                                            <div class="col-xl-12 col-lg-6 col-md-12 mb-1">
+                                                <div class="col-md-12">
+                                                    <!-- نمایش تصویر فعلی -->
+                                                    @if (!string.IsNullOrEmpty(Model.Product.ImageUrl))
+                                                    {
+                                                        <div class="mb-3">
+                                                            <label>تصویر فعلی:</label>
+                                                            <img src="/images/@Model.Product.ImageUrl" alt="تصویر محصول" class="img-thumbnail" style="max-width: 20%; height: auto;">
+                                                            <input type="text" name="ImageUrl" value="@Model.Product.ImageUrl" hidden=""/>
+                                                        </div>
+                                                    }
+
+                                                    <!-- آپلود تصویر جدید -->
+                                                    <label>آپلود تصویر جدید</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">بارگذاری</span>
+                                                        </div>
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" asp-for="Upload" id="inputGroupFile01" accept="image/*">
+                                                            <label class="custom-file-label" for="inputGroupFile01">انتخاب فایل</label>
+                                                        </div>
+                                                    </div>
+                                                    <span asp-validation-for="Upload" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="projectinput3">دسته بندی</label>
+                                        <select class="form-control" name="CategoryId" id="addressSelect">
+                                            @foreach (var item in Model?.Categories)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                        <button type="submit" class="btn btn-primary btn-round">ایجاد</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+@section Scripts{
+<script>
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        let fileName = e.target.files[0]?.name || "انتخاب فایل";
+        let label = e.target.nextElementSibling;
+        label.textContent = fileName;
+    });
+</script>
+
+
+}
