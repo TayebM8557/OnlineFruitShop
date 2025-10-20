@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using OnlineFruit_Business.Repository.IReposi;
 using OnlineFruit_Data.Context;
 using OnlineFruit_Data.Entity;
@@ -17,84 +18,101 @@ namespace OnlineFruit_Business.Repository.Reposi
     {
         private readonly DatabaseContext _db;
         private readonly IMapper _mapper;
+        private readonly ILogger<CartItemRepository> _logger;
 
-        public CartItemRepository(DatabaseContext db, IMapper mapper)
+        public CartItemRepository(DatabaseContext db, IMapper mapper, ILogger<CartItemRepository> logger)
         {
             _db = db;
             _mapper = mapper;
+            _logger = logger;
         }
-        public async Task<APP.CartItem> Create(CartItemDto cartItemDto, CancellationToken cancellationToken)
+
+        public async Task<CartItem> Create(CartItemDto cartItemDto, CancellationToken cancellationToken)
         {
-            var record = _mapper.Map<CartItem>(cartItemDto);
-            await _db.CartItems.AddAsync(record);
+            var entity = _mapper.Map<CartItem>(cartItemDto);
+            await _db.CartItems.AddAsync(entity, cancellationToken);
+
             try
             {
                 await _db.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                _logger.LogError(ex, "خطا در ایجاد آیتم سبد خرید");
+                throw new Exception("خطا در ذخیره‌سازی آیتم سبد خرید", ex);
             }
-            return record;
+
+            return entity;
         }
 
-        public async Task Delete(int Id, CancellationToken cancellationToken)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            var order = await _db.CartItems
-                .Where(x => x.Id == Id)
-                .FirstOrDefaultAsync(cancellationToken);
+            var entity = await _db.CartItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            if (entity == null)
+            {
+                _logger.LogWarning("آیتم با شناسه {Id} یافت نشد", id);
+                throw new KeyNotFoundException("آیتم مورد نظر برای حذف یافت نشد");
+            }
 
-            if (order != null)
-            {
-                _db.CartItems.Remove(order);
-                await _db.SaveChangesAsync(cancellationToken);
-            }
-            else
-            {
-                throw (new Exception());
-            }
+            _db.CartItems.Remove(entity);
+            await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<APP.CartItem>> GetAll( CancellationToken cancellationToken)
+        public async Task<List<CartItem>> GetAll(CancellationToken cancellationToken)
         {
-            var records = await _db.CartItems.Include(x => x.User).Include(y => y.Product)
-               .AsNoTracking()
-               .ToListAsync(cancellationToken);
-            return records;
+            return await _db.CartItems
+                .Include(x => x.User)
+                .Include(x => x.Product)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<CartItem>> GetAllInUserId(int userId, CancellationToken cancellationToken)
+        {
+            return await _db.CartItems
+                .Include(x => x.User)
+                .Include(x => x.Product)
+                .Where(c => c.UserId == userId)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<int> GetUserCartItemTotalQuantity(int userId, CancellationToken cancellationToken)
         {
-            var totalQuantity = await _db.CartItems
-               .AsNoTracking()
-               .Where(c => c.UserId == userId)
-               .CountAsync(cancellationToken); ;// شرط: برای کاربر خاص
-                                                // جمع مقدار ستون Quantity
-            return totalQuantity;
+            return await _db.CartItems
+                .Where(c => c.UserId == userId)
+                .SumAsync(c => c.Quantity, cancellationToken);
         }
 
-        public Task<CartItemDto> GetBy(int Id, CancellationToken cancellationToken)
+        public async Task<CartItemDto> GetBy(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var entity = await _db.CartItems
+                .Include(x => x.Product)
+                .Include(x => x.User)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            if (entity == null)
+            {
+                _logger.LogWarning("آیتم با شناسه {Id} یافت نشد", id);
+                throw new KeyNotFoundException("آیتم یافت نشد");
+            }
+
+            return _mapper.Map<CartItemDto>(entity);
         }
 
         public async Task Update(CartItemDto cartItemDto, CancellationToken cancellationToken)
         {
-            var record = await _mapper.ProjectTo<CartItemDto>(_db.Set<CartItem>())
-                .Where(x => x.Id == cartItemDto.Id).FirstOrDefaultAsync();
-            _mapper.Map(cartItemDto, record);
+            var entity = await _db.CartItems.FirstOrDefaultAsync(x => x.Id == cartItemDto.Id, cancellationToken);
+            if (entity == null)
+            {
+                _logger.LogWarning("آیتم برای بروزرسانی یافت نشد: {Id}", cartItemDto.Id);
+                throw new KeyNotFoundException("آیتم برای بروزرسانی یافت نشد");
+            }
+
+            _mapper.Map(cartItemDto, entity);
             await _db.SaveChangesAsync(cancellationToken);
         }
-
-        
-
-        public async Task<List<CartItem>> GetAllInUserId(int userId, CancellationToken cancellationToken)
-        {
-            var records = await _db.CartItems.Include(x => x.User).Include(y => y.Product)
-             .AsNoTracking()
-             .Where(c => c.UserId == userId)
-             .ToListAsync(cancellationToken);
-            return records;
-        }
     }
+
 }

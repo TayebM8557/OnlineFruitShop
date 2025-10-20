@@ -14,156 +14,93 @@ namespace OnlineFruitShop.Pages
     {
         private readonly ILogger<CartModel> _logger;
         private readonly ICartItemRepository _cartItemRepository;
-        private readonly IPaymentService _service;
+        private readonly IPaymentService _paymentService;
         private readonly DatabaseContext _databaseContext;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public CartModel(ILogger<CartModel> logger,ICartItemRepository cartItemRepository ,IPaymentService service, DatabaseContext databaseContext)
+        public CartModel(
+            ILogger<CartModel> logger,
+            ICartItemRepository cartItemRepository,
+            IPaymentService paymentService,
+            DatabaseContext databaseContext,
+            IPaymentRepository paymentRepository)
         {
-            _cartItemRepository = cartItemRepository;
-            _service = service;
-            _databaseContext = databaseContext;
             _logger = logger;
+            _cartItemRepository = cartItemRepository;
+            _paymentService = paymentService;
+            _databaseContext = databaseContext;
+            _paymentRepository = paymentRepository;
         }
 
-        public IEnumerable<CartItem> cartItems { get; set; }
+        // لیست آیتم‌های سبد خرید
+        public IEnumerable<CartItem> CartItems { get; set; } = Enumerable.Empty<CartItem>();
         public int UserId { get; set; }
-        public decimal totalPrice { get; set; }
         public decimal TotalPrice { get; set; }
-        // شناسه سفارش جاری
+        public decimal Discount { get; set; }
+        public decimal FinalPrice => TotalPrice - Discount;
         public int CurrentOrderId { get; set; }
+
         public async Task<IActionResult> OnGet(CancellationToken cancellationToken)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != null)
+            try
             {
-                UserId = int.Parse(userId);
+                UserId = GetUserIdFromClaims();
+                if (UserId == 0)
+                {
+                    _logger.LogWarning("کاربر احراز هویت نشده یا شناسه نامعتبر دارد.");
+                    return RedirectToPage("/Account/Login");
+                }
+
+                CartItems = await _cartItemRepository.GetAllInUserId(UserId, cancellationToken);
+
+                if (!CartItems.Any())
+                {
+                    _logger.LogInformation("سبد خرید کاربر {UserId} خالی است.", UserId);
+                }
+                
+                decimal total = CartItems.Sum(item => item.Product.Price * item.Quantity);
+                decimal discount = 3; // یا محاسبه‌شده
+                decimal final = total - discount;
+
+                ViewData["TotalPrice"] = total.ToString("N0");
+                ViewData["Discount"] = discount.ToString("N0");
+                ViewData["FinalPrice"] = final.ToString("N0");
+                TotalPrice = await _databaseContext.CartItems
+                    .Include(x => x.Product)
+                    .Where(x => x.UserId == UserId)
+                    .SumAsync(x => x.Product.Price * x.Quantity, cancellationToken);
+
+                Discount = 3; // یا محاسبه پویا
+
+                CurrentOrderId = await _paymentRepository.GetCurrentOrderId(UserId, cancellationToken);
+
+                return Page();
             }
-            CurrentOrderId = 123;
-            cartItems = await _cartItemRepository.GetAllInUserId(UserId,cancellationToken);
-            totalPrice = await _databaseContext.CartItems
-                .Where(x => x.UserId == UserId) // اگر می‌خواهید برای کاربر خاصی محاسبه کنید
-                .SumAsync(x => x.Product.Price * x.Quantity, cancellationToken);
-            ViewData["TotalPrice"] = totalPrice;
-            return Page();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "خطا در بارگذاری صفحه سبد خرید برای کاربر {UserId}", UserId);
+                return RedirectToPage("/Error");
+            }
         }
 
-        public async Task<IActionResult> OnGetDelete(int Id, CancellationToken cancellationToken)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            await _cartItemRepository.Delete(Id, cancellationToken);
+            var item = await _databaseContext.CartItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            if (item == null)
+                throw new KeyNotFoundException("آیتم یافت نشد");
 
-            return LocalRedirect("/Cart");
+            _databaseContext.CartItems.Remove(item);
+            await _databaseContext.SaveChangesAsync(cancellationToken);
         }
 
-        //public async Task<IActionResult> OnPost(CancellationToken cancellationToken)
-        //{
-           
-        //    using var transaction = await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
-        //    try
-        //    {
-        //        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //        if (userId == null) return Unauthorized();
 
-        //        if (!int.TryParse(userId, out var userIdParsed))
-        //            return Unauthorized();
 
-        //        var userCartItems = await _databaseContext.CartItems
-        //            .Include(ci => ci.Product)
-        //            .Where(ci => ci.UserId == userIdParsed)
-        //            .ToListAsync(cancellationToken);
+        private int GetUserIdFromClaims()
+        {
+            var claim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.TryParse(claim, out int id) ? id : 0;
+        }
 
-        //        if (!userCartItems.Any())
-        //            return BadRequest("Your cart is empty.");
-
-        //        foreach (var cartItem in userCartItems)
-        //        {
-        //            if (cartItem.Product == null)
-        //            {
-        //                return BadRequest($"Product with ID {cartItem.ProductId} does not exist.");
-        //            }
-
-        //            if (cartItem.Product.Stock < cartItem.Quantity)
-        //            {
-        //                return BadRequest($"Not enough stock for product {cartItem.Product.Name}.");
-        //            }
-
-        //            cartItem.Product.Stock -= cartItem.Quantity;
-
-        //            // Set OriginalValues for RowVersion to enable optimistic locking
-        //            _databaseContext.Entry(cartItem.Product).OriginalValues["RowVersion"] = cartItem.Product.RowVersion;
-        //        }
-
-        //        var totalPrice = userCartItems.Sum(ci => ci.Product.Price * ci.Quantity);
-
-        //        var order = new Order
-        //        {
-        //            UserId = userIdParsed,
-        //            OrderDate = DateTime.Now,
-        //            TotalAmount = totalPrice,
-        //            Status = OrderStatus.Pending
-        //        };
-        //        _databaseContext.Orders.Add(order);
-        //        await _databaseContext.SaveChangesAsync(cancellationToken);
-
-        //        foreach (var cartItem in userCartItems)
-        //        {
-        //            var orderItem = new OrderItem
-        //            {
-        //                OrderId = order.Id,
-        //                ProductId = cartItem.ProductId,
-        //                Quantity = cartItem.Quantity,
-        //                UnitPrice = cartItem.Product.Price,
-        //                Discount = cartItem.Product.Discount
-        //            };
-        //            _databaseContext.OrderItems.Add(orderItem);
-        //        }
-
-        //        var payment = new Payment
-        //        {
-        //            OrderId = order.Id,
-        //            PaymentDate = DateTime.Now,
-        //            Amount = totalPrice,
-        //            PaymentMethod = "CreditCard",
-        //            Status = PaymentStatus.Pending,
-        //            TransactionId = Guid.NewGuid().ToString()
-        //        };
-        //        _databaseContext.Payments.Add(payment);
-
-        //        _databaseContext.CartItems.RemoveRange(userCartItems);
-
-        //        try
-        //        {
-        //            await _databaseContext.SaveChangesAsync(cancellationToken);
-        //            await transaction.CommitAsync(cancellationToken);
-
-        //            return LocalRedirect("/");
-        //        }
-        //        catch (DbUpdateConcurrencyException ex)
-        //        {
-        //            foreach (var entry in ex.Entries)
-        //            {
-        //                if (entry.Entity is Product)
-        //                {
-        //                    var databaseValues = await entry.GetDatabaseValuesAsync(cancellationToken);
-        //                    if (databaseValues == null)
-        //                    {
-        //                        return NotFound("The product was deleted by another user.");
-        //                    }
-
-        //                    var databaseProduct = (Product)databaseValues.ToObject();
-
-        //                    return new StatusCodeResult(StatusCodes.Status409Conflict);
-        //                }
-        //            }
-        //            throw;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Transaction failed.");
-        //        await transaction.RollbackAsync(cancellationToken);
-        //        throw;
-        //    }
-        //}
         //// درخواست پرداخت
         public async Task<IActionResult> OnPostAsync([FromBody] dynamic request)
         {
@@ -173,7 +110,7 @@ namespace OnlineFruitShop.Pages
 
             decimal totalAmount = TotalPrice;
 
-            var paymentResult = await _service.CreatePaymentRequestAsync(
+            var paymentResult = await _paymentService.CreatePaymentRequestAsync(
                 totalAmount,
                 "پرداخت سفارش فروشگاه",
                 Url.Page("/Cart", "PaymentCallback", null, Request.Scheme),
@@ -192,7 +129,7 @@ namespace OnlineFruitShop.Pages
             if (status != "OK")
                 return new JsonResult(new { isSuccess = false, message = "پرداخت انجام نشد یا لغو شد." });
 
-            var verification = await _service.VerifyPaymentAsync(authority, TotalPrice);
+            var verification = await _paymentService.VerifyPaymentAsync(authority, TotalPrice);
 
             if (verification.IsSuccess)
             {

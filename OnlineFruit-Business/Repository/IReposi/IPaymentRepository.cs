@@ -16,5 +16,6 @@ namespace OnlineFruit_Business.Repository.IReposi
         Task Delete(int Id, CancellationToken cancellationToken);
         Task<APP.Payment> Create(PaymentDto paymentDto, CancellationToken cancellationToken);
         Task<PaymentDto> GetBy(int Id, CancellationToken cancellationToken);
+        Task<int> GetCurrentOrderId(int userId, CancellationToken cancellationToken);
     }
 }

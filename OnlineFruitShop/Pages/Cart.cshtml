@@ -1,4 +1,4 @@
-﻿@page
+﻿@* @page
 @model OnlineFruitShop.Pages.CartModel
 @{
 }
@@ -120,11 +120,20 @@
 <script src="~/js/payment.js"></script>
 
 
-@* <div class="hero-wrap hero-bread" style="background-image: url('../Shop/pics/bg_1.jpg');">
+
+
+ *@
+ 
+@page
+@model OnlineFruitShop.Pages.CartModel
+
+<div class="hero-wrap hero-bread" style="background-image: url('../Shop/pics/bg_1.jpg');">
     <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
             <div class="col-md-9 ftco-animate text-center">
-                <p class="breadcrumbs"><span class="mr-2"><a href="index.html">خانه</a></span></p>
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="index.html">خانه</a></span>
+                </p>
                 <h1 class="mb-0 bread">پیش فاکتور</h1>
             </div>
         </div>
@@ -135,12 +144,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 ftco-animate">
-                <div class="cart-list">
-                    <table class="table">
-                        <thead class="thead-primary">
-                            <tr class="text-center">
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
+                <div class="cart-list table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="thead-primary text-center">
+                            <tr>
+                                <th>حذف</th>
+                                <th>تصویر</th>
                                 <th>نام محصول</th>
                                 <th>قیمت</th>
                                 <th>تعداد</th>
@@ -148,92 +157,75 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach( var item in Model.cartItems)
+                            @foreach (var item in Model.CartItems)
                             {
-                                <tr class="text-center">
+                                <tr class="text-center align-middle">
                                     <td class="product-remove">
-                                        <a asp-page-handler="Delete" asp-route-ID="@item.Id" onclick="confirm('آیا از حذف آیتم مطمئنید؟!')">
-                                        <span class="ion-ios-close"></span></a>
+                                        <a asp-page-handler="Delete" asp-route-id="@item.Id" onclick="return confirm('آیا از حذف آیتم مطمئنید؟!')">
+                                            <span class="ion-ios-close"></span>
+                                        </a>
                                     </td>
-                                   
-
                                     <td class="image-prod">
-                                        <div class="img" style="background-image:url(/images/@item.Product.ImageUrl);"></div>
-                                    
+                                        <div class="img" style="background-image:url(/images/@item.Product.ImageUrl); height: 100px; background-size: cover;"></div>
                                     </td>
-
                                     <td class="product-name">
-                                        <h3>@item.Product.Name</h3>
-                                        <p>
-                                           @item.Product.Description
-                                        </p>
+                                        <h5>@item.Product.Name</h5>
+                                        <small>@item.Product.Description</small>
                                     </td>
-
                                     <td class="price">@item.Product.Price تومان</td>
-
-                                    <td class="quantity">
-                                        <div class="input-group mb-3">
-                                            <input type="text" name="quantity" class="quantity form-control input-number"
-                                                   value="@item.Quantity" min="1" max="100">
-                                        </div>
-                                    </td>
-
+                                    <td class="quantity">@item.Quantity</td>
                                     <td class="total">@($"{item.Product.Price * item.Quantity:N0} تومان")</td>
                                 </tr>
-
-                                <!-- END TR-->
                             }
-                            
-
-                         
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
         <div class="row justify-content-end">
-        
-            <div class="col-lg-12 mt-5 cart-wrap ftco-animate">
+            <div class="col-lg-6 mt-5 cart-wrap ftco-animate">
                 <div class="cart-total mb-3">
                     <h3>صورت حساب</h3>
-                    <p class="d-flex">
+                    <p class="d-flex justify-content-between">
                         <span>جمع کل</span>
-                        <span>@(ViewData["TotalPrice"] ?? "0") تومان</span>
+                        <span>@ViewData["TotalPrice"] تومان</span>
                     </p>
-                    <p class="d-flex">
-                        <span>هزینه ی تحویل</span>
-                        <span>0.00 تومان</span>
+                    <p class="d-flex justify-content-between">
+                        <span>هزینه تحویل</span>
+                        <span>0 تومان</span>
                     </p>
-                    <p class="d-flex">
+                    <p class="d-flex justify-content-between">
                         <span>تخفیف</span>
-                        <span>3.00 تومان</span>
+                        <span>@ViewData["Discount"] تومان</span>
                     </p>
-                    <hr>
-                    <p class="d-flex total-price">
-                        <span>جمع کل</span>
-                        <span>@(ViewData["TotalPrice"] ?? "0") تومان</span>
+                    <hr />
+                    <p class="d-flex justify-content-between font-weight-bold">
+                        <span>مبلغ نهایی</span>
+                        <span>@ViewData["FinalPrice"] تومان</span>
                     </p>
                 </div>
-                 <form method="post" asp-page="Cart" asp-page-handler="OnPost">
-                    <button type="submit" class="btn btn-primary py-3 px-4" id="payButton">
+
+                <form method="post" asp-page-handler="Pay">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="orderId" value="@Model.CurrentOrderId" />
+                    <button type="submit" class="btn btn-success btn-block py-3 px-4" id="payButton">
                         <i class="fas fa-credit-card"></i> پرداخت
                     </button>
                 </form>
-                <div class="mt-3">
+
+                <div class="mt-3 text-center">
                     <small class="text-muted">
-                        <i class="fas fa-shield-alt"></i> 
-                        پرداخت شما از طریق درگاه امن زرین‌پال انجام می‌شود
+                        <i class="fas fa-shield-alt"></i> پرداخت شما از طریق درگاه امن زرین‌پال انجام می‌شود
                     </small>
                 </div>
+
+                <div id="paymentMessage" class="mt-2 text-center"></div>
             </div>
         </div>
     </div>
 </section>
 
-
-
-
-<script src="~/js/payment.js"></script>
- *@
-
-
+@section Scripts {
+    <script src="~/js/payment.js"></script>
+}
