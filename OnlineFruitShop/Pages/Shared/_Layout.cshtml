@@ -33,7 +33,14 @@
 
 
 
-
+        .row {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            /* flex-wrap: wrap; */
+            margin-right: -15px;
+            margin-left: -15px;
+        }
 
         button {
             cursor: pointer;
@@ -41,7 +48,7 @@
             border-radius: 4px;
             font-weight: 600;
             margin: 0 10px;
-            width: 120px;
+            width: 100px;
             padding: 10px 0;
             box-shadow: 0 0 20px #82ae46;
             transition: 0.4s;
@@ -169,19 +176,19 @@
                             }
                             else
                             {
-                                <div class="container">
-                                    <div>
-                                        <div class="row" style="width:650px;">
-                                            <a href="/Login/LoginPage">
-                                                <button class="log">ورود</button>
-                                            </a>
-                                            <a href="/Login/Register">
-                                                <button class="reg"> ثبت نام</button>
-                                            </a>
+                                        <div class="row">
+                                            <div calss="col">
+                                                <a href="/Login/LoginPage">
+                                                    <button class="log">ورود</button>
+                                                </a>
+                                            </div>
+                                            <div calss="col">
+                                                <a href="/Login/Register">
+                                                    <button class="reg"> ثبت نام</button>
+                                                </a>
+                                            </div>
                                         </div>
-
-                                    </div>
-                                </div>
+                                  
                             }
 
                         </div>
