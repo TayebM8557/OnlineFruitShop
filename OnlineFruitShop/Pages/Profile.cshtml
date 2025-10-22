@@ -3,83 +3,73 @@
 @{
     Layout = "Shared/_LayoutProfile";
 }
-<div class="col-lg-9 col-md-9 col-xs-12 pl">
-    <div class="profile-content">
-        <div class="profile-stats">
+<div class="container mt-4">
+    <h2 class="mb-4">ویرایش اطلاعات کاربری</h2>
 
-            <form class="form" method="post" asp-page-handler="OnPost">
-                <input type="hidden" id="projectinput3" class="form-control" name="Id" value="@Model.User?.Id" readonly="readonly">
-                <input type="hidden" id="projectinput3" class="form-control" name="AddressId" value="@Model?.User?.FirstName" readonly="readonly">
-                <input type="hidden" id="projectinput3" class="form-control" name="UserId" value="@Model?.User?.LastName" readonly="readonly">
+    <form method="post">
+        <input type="hidden" name="User.Id" value="@Model.User.Id" />
 
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title">نام  :</div>
-                            <input type="text" id="projectinput3" class="form-control" name="FirstName" value="@Model?.User?.FirstName">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title">نام خانوادگی :</div>
-                            <input type="text" id="projectinput3" class="form-control" name="LastName" value="@Model?.User?.LastName">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title">شماره تلفن همراه:</div>
-                            <input type="text" id="projectinput3" class="form-control" name="PhoneNumber" value="@Model?.User?.PhoneNumber">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title">تاریخ عضویت:</div>
-
-                            <input type="text" id="projectinput3" class="form-control" name="PhoneNumber" value="۱۳۹۹/۰۱/۱۲" readonly="readonly">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title"> شهر :</div>
-                            <input type="text" id="projectinput3" class="form-control" name="City" value="@Model.User?.Address?.City">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title"> پست الکترونیک :</div>
-                            <input type="text" id="projectinput3" class="form-control" name="PhoneNumber" value="@Model.User?.Address?.PostalCode">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title"> خیابان :</div>
-                            <input type="text" id="projectinput3" class="form-control" name="Street" value="@Model.User?.Address?.Street">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="title"> کد پستی :</div>
-                            <input type="text" id="projectinput3" class="form-control" name="PostalCode" value="@Model.User?.Address?.PostalCode">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-danger mr-1">
-                        <i class="icon-trash"></i> لغو
-                    </button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="icon-note"></i> ذخیره
-                    </button>
-                </div>
-            </form>
-
+        <h4 class="mt-3">اطلاعات کاربر</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <label>نام:</label>
+                <input type="text" class="form-control" name="User.FirstName" value="@Model.User.FirstName" />
+            </div>
+            <div class="col-md-4">
+                <label>نام خانوادگی:</label>
+                <input type="text" class="form-control" name="User.LastName" value="@Model.User.LastName" />
+            </div>
+            <div class="col-md-4">
+                <label>شماره تلفن همراه:</label>
+                <input type="text" class="form-control" name="User.PhoneNumber" value="@Model.User.PhoneNumber" />
+            </div>
         </div>
-    </div>
+
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label>ایمیل:</label>
+                <input type="email" class="form-control" name="User.Email" value="@Model.User.Email" />
+            </div>
+            <div class="col-md-4">
+                <label>نام کاربری:</label>
+                <input type="text" class="form-control" name="User.UserName" value="@Model.User.UserName" />
+            </div>
+        </div>
+
+        <h4 class="mt-4">اطلاعات آدرس</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <label>خیابان:</label>
+                <input type="text" class="form-control" name="User.Address.Street" value="@Model.User.Address?.Street" />
+            </div>
+            <div class="col-md-4">
+                <label>شهر:</label>
+                <input type="text" class="form-control" name="User.Address.City" value="@Model.User.Address?.City" />
+            </div>
+            <div class="col-md-4">
+                <label>استان:</label>
+                <input type="text" class="form-control" name="User.Address.State" value="@Model.User.Address?.State" />
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label>کشور:</label>
+                <input type="text" class="form-control" name="User.Address.Country" value="@Model.User.Address?.Country" />
+            </div>
+            <div class="col-md-4">
+                <label>کد پستی:</label>
+                <input type="text" class="form-control" name="User.Address.PostalCode" value="@Model.User.Address?.PostalCode" />
+            </div>
+            <div class="col-md-4">
+                <label>پلاک:</label>
+                <input type="number" class="form-control" name="User.Address.plaque" value="@Model.User.Address?.plaque" />
+            </div>
+        </div>
+
+        <div class="form-actions mt-4">
+            <button type="submit" class="btn btn-success">ذخیره</button>
+            <a href="/Profile" class="btn btn-secondary">لغو</a>
+        </div>
+    </form>
 </div>
