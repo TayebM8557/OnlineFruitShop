@@ -161,9 +161,14 @@
                             {
                                 <tr class="text-center align-middle">
                                     <td class="product-remove">
-                                        <a asp-page-handler="Delete" asp-route-id="@item.Id" onclick="return confirm('آیا از حذف آیتم مطمئنید؟!')">
+                                        @*  <a asp-page-handler="Delete" asp-route-id="@item.Id" onclick="return confirm('آیا از حذف آیتم مطمئنید؟!')">
                                             <span class="ion-ios-close"></span>
-                                        </a>
+                                        </a> *@
+                                        <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('آیا از حذف آیتم مطمئنید؟!')">
+                                            <button type="submit" class="btn btn-link">
+                                                <span class="ion-ios-close"></span>
+                                            </button>
+                                        </form>
                                     </td>
                                     <td class="image-prod">
                                         <div class="img" style="background-image:url(/images/@item.Product.ImageUrl); height: 100px; background-size: cover;"></div>

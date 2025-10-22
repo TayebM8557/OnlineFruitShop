@@ -83,7 +83,7 @@ namespace OnlineFruitShop.Pages
             }
         }
 
-        public async Task Delete(int id, CancellationToken cancellationToken)
+        public async Task OnPostDelete(int id, CancellationToken cancellationToken)
         {
             var item = await _databaseContext.CartItems.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
             if (item == null)
