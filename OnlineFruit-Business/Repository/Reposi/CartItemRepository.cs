@@ -81,7 +81,7 @@ namespace OnlineFruit_Business.Repository.Reposi
         {
             return await _db.CartItems
                 .Where(c => c.UserId == userId)
-                .SumAsync(c => c.Quantity, cancellationToken);
+                .CountAsync(cancellationToken);
         }
 
         public async Task<CartItemDto> GetBy(int id, CancellationToken cancellationToken)

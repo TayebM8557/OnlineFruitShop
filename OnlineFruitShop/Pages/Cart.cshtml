@@ -170,10 +170,11 @@
                                     </td>
                                     <td class="product-name">
                                         <h5>@item.Product.Name</h5>
-                                        <small>@item.Product.Description</small>
+                                        <small>@item.Product.Description
+                                            </small>
                                     </td>
-                                    <td class="price">@item.Product.Price تومان</td>
-                                    <td class="quantity">@item.Quantity</td>
+                                    <td class="price"> @($"{item.Product.Price:N0} تومان")</td>
+                                    <td class="quantity">@item.Quantity </td>
                                     <td class="total">@($"{item.Product.Price * item.Quantity:N0} تومان")</td>
                                 </tr>
                             }

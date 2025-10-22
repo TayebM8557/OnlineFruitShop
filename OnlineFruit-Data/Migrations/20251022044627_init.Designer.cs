@@ -12,7 +12,7 @@ using OnlineFruit_Data.Context;
 namespace OnlineFruit_Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20251021081009_init")]
+    [Migration("20251022044627_init")]
     partial class init
     {
         /// <inheritdoc />
