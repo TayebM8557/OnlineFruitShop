@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -21,12 +22,14 @@ namespace OnlineFruit_Data.Entity
             public ICollection<Order> Orders { get; set; }     // لیست سفارش‌ها
             public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
             public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
+            public string? NationalCode { get; set; } // کد ملی برای احراز هویت
+
 
             public int? AddressId { get; set; }
             public Address? Address { get; set; }
         }
        
-        [Owned]
+        
         public class Address
         {
             public int Id { get; set; }
@@ -50,7 +53,8 @@ namespace OnlineFruit_Data.Entity
             public decimal Price { get; set; } // قیمت محصول
             public int Stock { get; set; } // موجودی انبار
             public string ImageUrl { get; set; } // آدرس تصویر محصول
-
+            public UnitType UnitType { get; set; } = UnitType.Piece;
+           
             public int CategoryId { get; set; }
             public Category Category { get; set; }
 
@@ -63,6 +67,8 @@ namespace OnlineFruit_Data.Entity
             public DateTime CreatedAt { get; set; }
             public DateTime UpdatedAt { get; set; }
             public decimal Discount { get; set; } // اضافه کردن فیلد تخفیف برای هر محصول
+            [NotMapped]
+            public decimal FinalPrice => Price - Discount;
         }
        
         public class CartItem
@@ -85,12 +91,20 @@ namespace OnlineFruit_Data.Entity
             public DateTime OrderDate { get; set; }
             public OrderStatus Status { get; set; } = OrderStatus.Pending;
             public decimal TotalAmount { get; set; } // مبلغ کل
-
+            public Payment? Payment { get; set; }
             public int UserId { get; set; }
             public User User { get; set; }
             public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
             public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
             public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+            public string? TrackingCode { get; set; } // کد رهگیری
+            public string? Notes { get; set; } // توضیحات سفارش
+        }
+
+        public enum UnitType
+        {
+            Piece,   // عددی
+            Kilogram // وزنی
         }
 
         public enum OrderStatus

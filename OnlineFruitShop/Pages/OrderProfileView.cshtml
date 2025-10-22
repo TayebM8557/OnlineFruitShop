@@ -4,69 +4,61 @@
     Layout = "Shared/_LayoutProfile";
 }
 
+}
 
-<div class="col-lg-9 col-md-9 col-xs-12 pl">
-    <div class="profile-content">
-        <div class="profile-stats">
-            <div class="table-order-view">
-                <h2 class="order-view-title mt-4 mb-3">جزییات سفارش </h2>
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col">نام محصول</th>
-                            <th scope="col">مجموع</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="product-name">
-                                @Model.OrderItem?.Product?.Name
-                            </td>
-                            <td class="product-total">
-                                <span class="amount">
-                                    <span>تومان</span>
-                                    @Model.OrderItem?.Product?.Price
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th scope="row">مجموع:</th>
-                            <td>
-                                <span class="amount">
-                                    <span>تومان</span>
-                                    @Model.OrderItem?.UnitPrice
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">حمل و نقل:</th>
-                            <td>حمل و نقل رایگان</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">روش پرداخت:</th>
-                            <td>انتقال مستقیم بانکی</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">تعداد</th>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">قیمت نهایی:</th>
-                            <td>
-                                <span class="amount">
-                                    <span>تومان</span>
-                                    40,000
-                                </span>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <br>
-                <br>
+<div class="container mt-4">
+    <h2 class="mb-4">جزئیات سفارش شماره @Model.Order.Id</h2>
 
-            </div>
-        </div>
+    <div class="mb-3">
+        <strong>نام مشتری:</strong> @Model.Order.User.FirstName @Model.Order.User.LastName <br />
+        <strong>تاریخ سفارش:</strong> @Model.Order.OrderDate.ToString("yyyy/MM/dd") <br />
+        <strong>وضعیت سفارش:</strong> @Model.Order.Status
     </div>
+
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>نام محصول</th>
+                <th>تعداد</th>
+                <th>قیمت واحد</th>
+                <th>تخفیف</th>
+                <th>قیمت نهایی</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Order.OrderItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("N0") تومان</td>
+                    <td>@item.Discount.ToString("N0") تومان</td>
+                    <td>@item.TotalPrice.ToString("N0") تومان</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4" class="text-end">مجموع کل:</th>
+                <th>@Model.Order.TotalAmount.ToString("N0") تومان</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-end">روش پرداخت:</th>
+                <td>
+                    @if (Model.Payment != null)
+                    {
+                        <span>@Model.Payment.PaymentMethod - @Model.Payment.Status</span>
+                    }
+                    else
+                    {
+                        <span>پرداخت ثبت نشده</span>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th colspan="4" class="text-end">شماره تراکنش:</th>
+                <td>@Model.Payment?.TransactionId ?? "ندارد"</td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
