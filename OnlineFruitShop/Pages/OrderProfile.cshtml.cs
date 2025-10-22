@@ -28,16 +28,17 @@ namespace OnlineFruitShop.Pages
 
         public List<Order> Orders { get; set; }
 
-        public async Task<IActionResult> OnGet(CancellationToken cancellationToken)
+        public async Task<IActionResult> OnGetAsync(CancellationToken cancellationToken)
         {
-            var getUserId = _userManager.GetUserId(_httpContext.HttpContext.User);
-            var userId = Convert.ToInt32(getUserId);
+            var userIdStr = _userManager.GetUserId(_httpContext.HttpContext.User);
+            if (!int.TryParse(userIdStr, out var userId))
+                return Unauthorized();
 
-            //Orders = await _databaseContext.Orders
-            //    .Include(o => o.)
-            //    .Where(o => o.UserId == userId)
-            //    .OrderByDescending(o => o.OrderDate)
-            //    .ToListAsync(cancellationToken);
+            Orders = await _databaseContext.Orders
+                .Include(o => o.Payment)
+                .Where(o => o.UserId == userId)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync(cancellationToken);
 
             return Page();
         }

@@ -1,93 +1,47 @@
 ﻿@page
 @model OnlineFruitShop.Pages.OrderProfileModel
 @{
+    
+    
     Layout = "Shared/_LayoutProfile";
 }
-<div class="col-lg-9 col-md-9 col-xs-12 pl">
-    <div class="profile-content">
-        <div class="profile-stats">
-            <div class="table-orders">
-                <table class="table table-profile-orders">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">شماره سفارش</th>
-                            <th scope="col">تاریخ ثبت سفارش</th>
-                            <th scope="col">وضعیت</th>
-                            <th scope="col">مجموع</th>
-                            <th scope="col">جزئیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model?.Orders)
-                        {
-                         @*    <tr>
-                                <td class="order-code">@item.TransactionId</td>
-                                <td>
-                                    @item.Order.Status
-                                    
+<div class="container mt-4">
+    <h2 class="mb-4">لیست سفارش‌های شما</h2>
 
-                                </td>
-                                <td class="Waiting text-success">پرداخت شده</td>
-                                <td class="totla">
-                                    <span class="amount">
-                                        @item.Order.TotalAmount
-
-                                        <span>تومان</span>
-                                    </span>
-                                </td>
-                                <td class="detail">
-                                    <a asp-page-handler="OnGet" asp-page="OrderProfileView" asp-route-ID="@item.Id">
-                                        <i class="fa fa-pencil font-medium-3 mr-2"> نمایش</i>
-                                    </a>
-                                </td>
-                            </tr> *@
-                        }
-
-                    </tbody>
-                </table>
-                <div class="profile-orders">
-                    <div class="collapse">
-                        <div class="profile-orders-item">
-                            <div class="profile-orders-header">
-                                <a href="profile-order-2.html" class="profile-orders-header-details">
-                                    <div class="profile-orders-header-summary">
-                                        <div class="profile-orders-header-row">
-                                            <span class="profile-orders-header-id">DKC-79356178</span>
-                                            <span class="profile-orders-header-state text-success">
-                                                پرداخت
-                                                شده
-                                            </span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <!-- <hr class="ui-separator"> -->
-                                <div class="profile-orders-header-data">
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-label">تاریخ ثبت سفارش</div>
-                                        <div class="profile-info-value">
-
-                                            سه شنبه 4 فروردین 99
-                                        </div>
-                                    </div>
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-label">مبلغ قابل پرداخت</div>
-                                        <div class="profile-info-value">0</div>
-                                    </div>
-                                    <div class="profile-info-row">
-                                        <div class="profile-info-label">مبلغ کل</div>
-                                        <div class="profile-info-value">
-                                            <span class="amount">
-                                                2,400,000
-                                                <span>تومان</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @if (Model.Orders.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+            <tr>
+                <th>شماره سفارش</th>
+                <th>تاریخ ثبت</th>
+                <th>وضعیت</th>
+                <th>مبلغ کل</th>
+                <th>وضعیت پرداخت</th>
+                <th>جزئیات</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToString("yyyy/MM/dd")</td>
+                    <td>@order.Status</td>
+                    <td>@order.TotalAmount.ToString("N0") تومان</td>
+                    <td>@order.Payment?.Status.ToString() ?? "در انتظار پرداخت"</td>
+                    <td>
+                        <a asp-page="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-primary">
+                            مشاهده
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">شما هنوز سفارشی ثبت نکرده‌اید.</div>
+    }
 </div>
