@@ -30,19 +30,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.Orders)
+                                @foreach (var item in Model?.Orders)
                                 {
                                     <tr role="row" class="odd">
-                                        <td class="sorting_1">@item.Order.User.FirstName @item.Order.User.LastName</td>
-                                        <td>@item.Product.Name</td>
-                                        <td>@item.Quantity</td>
-                                        <td style="width: 20%;"><img src="/images/@item.Product?.ImageUrl" alt="تصویر محصول" class="img-thumbnail" style="width: 20%; height: auto;"></td>
-                                        <td>@item.Order.User.Address.Country ، @item.Order.User.Address.City ، @item.Order.User.Address.Street ، @item.Order.User.Address.State ، @item.Order.User.Address.PostalCode ، @item.Order.User.Address.plaque</td>
+                                        <td class="sorting_1">@item.Order?.User?.FirstName @item?.Order?.User?.LastName</td>
+                                        <td>@item?.Product?.Name</td>
+                                        <td>@item?.Quantity</td>
+                                        <td style="width: 20%;"><img src="/images/@item?.Product?.ImageUrl" alt="تصویر محصول" class="img-thumbnail" style="width: 20%; height: auto;"></td>
+                                        <td>@item?.Order?.User?.Address?.Country ، @item?.Order?.User?.Address?.City ، @item?.Order?.User?.Address?.Street ، @item?.Order?.User?.Address?.State ، @item?.Order?.User?.Address?.PostalCode ، @item?.Order?.User?.Address?.plaque</td>
                                         <td>
                                           @*   <a asp-page-handler="Delete" asp-route-ID="@item.Id" onclick="confirm('آیا از حذف آیتم مطمئنید؟!')">
                                                 <i class="fa fa-trash-o font-medium-3 mr-2"></i>
                                             </a> *@
-                                            <a asp-page-handler="Change" asp-page="MangmentOrder" asp-route-ID="@item.OrderId" onclick="confirm('آیا از ویرایش آیتم مطمئنید؟!')">
+                                            <a asp-page-handler="Change" asp-page="MangmentOrder" asp-route-ID="@item?.OrderId" onclick="confirm('آیا از ویرایش آیتم مطمئنید؟!')">
                                                 <i class="fa fa-pencil font-medium-3 mr-2"></i>
                                             </a>
 

@@ -40,11 +40,15 @@ namespace OnlineFruit_Business.Repository.Reposi
 
         public async Task Delete(int Id, CancellationToken cancellationToken)
         {
-            var order = await _db.Products
+            var product = await _db.Products
                 .Where(x => x.Id == Id)
                 .FirstOrDefaultAsync(cancellationToken);
-            
-            await _db.SaveChangesAsync(cancellationToken);
+
+            if (product != null)
+            {
+                _db.Products.Remove(product);
+                await _db.SaveChangesAsync(cancellationToken);
+            }
         }
 
         public async Task<List<APP.Product>> GetAll(CancellationToken cancellationToken)

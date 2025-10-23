@@ -9,12 +9,15 @@ namespace OnlineFruit_Data.Entity.Dtos
 {
     public class PaymentDto 
     {
-        public int Id { get; set; }
-        public DateTime PaymentDate { get; set; }
-        public decimal Amount { get; set; }
-        public string PaymentMethod { get; set; } // روش پرداخت (مثلاً کارت بانکی، کیف پول)
+        public int? Id { get; set; }
+        public DateTime? PaymentDate { get; set; } // تاریخ پرداخت
+        public decimal? Amount { get; set; } // مبلغ پرداختی
+        public string? PaymentMethod { get; set; } // روش پرداخت
+     
+        public string? TransactionId { get; set; } // شماره تراکنش
 
         public int? OrderId { get; set; }
         public Order? Order { get; set; }
     }
+    
 }

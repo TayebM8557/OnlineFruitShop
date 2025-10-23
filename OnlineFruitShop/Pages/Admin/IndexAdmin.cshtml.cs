@@ -21,7 +21,7 @@ namespace OnlineFruitShop.Pages.Admin
         public async Task<IActionResult> OnPostAsync()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToPage("/Index");
+            return RedirectToPage("/Login/LoginPage");
         }
     }
 }

@@ -49,6 +49,7 @@ namespace OnlineFruit_Business.Repository.Reposi
 
         public async Task<List<APP.OrderItem>> GetAll(CancellationToken cancellationToken)
         {
+
             var purchasedProducts = await _db.OrderItems
             .Where(oi => _db.Payments
                 .Any(p => p.OrderId == oi.OrderId && p.Status == PaymentStatus.Completed)) // بررسی پرداخت موفق
